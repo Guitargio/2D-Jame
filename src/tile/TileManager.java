@@ -13,22 +13,26 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10];
+        getTileImage();
     }
 
     public void getTileImage() {
         try {
             tile[0] = new Tile();
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream("res/tiles/grass.png"));
+            tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));
 
             tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("res/tiles/wall.png"));
+            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png"));
 
             tile[2] = new Tile();
-            tile[2].image = ImageIO.read(getClass().getResourceAsStream("res/tiles/water.png"));
+            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
 
         } catch (IOException e) {
             System.out.println("Errore nel caricamento di una tile");
         }
+            catch (NullPointerException e) {
+                System.out.println("ERRORE: una tile è null");
+            }
     }
 
     public void draw(Graphics2D g2) {
