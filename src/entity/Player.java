@@ -43,8 +43,6 @@ public class Player extends Entity {
         }
     }
 
-
-
     public void update() {
         if(keyHandler.upPressed) {
             direction = "up";
