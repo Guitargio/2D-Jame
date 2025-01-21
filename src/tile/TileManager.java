@@ -4,16 +4,23 @@ import main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.Scanner;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] tile;
+    Tile[] tile;        // array con le 3 tile
+    int[][] mapTileNum;     // matrice con la tilemap in numeri
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10];
-        getTileImage();
+        mapTileNum = new int[gp.maxScreenRow][gp.maxScreenCol];
+        getTileImage();     //Inizializza il vettore "tile" con le 3 tiles
+        loadMap();          // Inizializza la matrice "mapTileNum"
+
     }
 
     public void getTileImage() {
@@ -35,7 +42,46 @@ public class TileManager {
             }
     }
 
+    public void loadMap() {
+        try {
+            mapTileNum = readMatrix("/maps/tilemap.txt", gp.maxScreenRow, gp.maxScreenCol);
+        } catch (IOException e) {
+            System.out.println("Impossibile caricare la tilemap");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int[][] readMatrix(String filename, int rows, int cols) throws IOException {
+
+        int[][] map = new int[rows][cols];
+
+        try (Scanner input = new Scanner(getClass().getResourceAsStream(filename))){
+
+            for(int i = 0; i < rows; i++) {
+                for(int j = 0; j < cols; j++) {
+                    map[i][j] = input.nextInt();
+                    System.out.printf("%d", map[i][j]);
+                }
+                System.out.print("\n");
+            }
+            System.out.println("MAP SUCCESSFULLY LOADED");
+        }
+        return map;
+    }
+
     public void draw(Graphics2D g2) {
-        g2.drawImage(tile[0].image, 0, 0, gp.tileSize, gp.tileSize, null);
+
+        int x, y;
+        x = y = 0;
+
+        for(int i = 0; i < gp.maxScreenRow; i++) {
+            for(int j = 0; j < gp.maxScreenCol; j++) {
+                int tileType = mapTileNum[i][j];
+                g2.drawImage(tile[tileType].image, x, y, gp.tileSize, gp.tileSize, null);
+                x += gp.tileSize;
+            }
+            x = 0;
+            y += gp.tileSize;
+        }
     }
 }

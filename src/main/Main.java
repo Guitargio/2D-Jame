@@ -1,5 +1,7 @@
 package main;
 
+import tile.TileManager;
+
 import javax.swing.*;
 
 public class Main {
