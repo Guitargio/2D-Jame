@@ -19,7 +19,7 @@ public class TileManager {
         tile = new Tile[10];
         mapTileNum = new int[gp.maxScreenRow][gp.maxScreenCol];
         getTileImage();     //Inizializza il vettore "tile" con le 3 tiles
-        loadMap();          // Inizializza la matrice "mapTileNum"
+        loadMap("/maps/tilemap.txt");          // Inizializza la matrice "mapTileNum"
 
     }
 
@@ -42,9 +42,9 @@ public class TileManager {
             }
     }
 
-    public void loadMap() {
+    public void loadMap(String filename) {
         try {
-            mapTileNum = readMatrix("/maps/tilemap.txt", gp.maxScreenRow, gp.maxScreenCol);
+            mapTileNum = readMatrix(filename, gp.maxScreenRow, gp.maxScreenCol);
         } catch (IOException e) {
             System.out.println("Impossibile caricare la tilemap");
             throw new RuntimeException(e);
